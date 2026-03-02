@@ -1,207 +1,59 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Simulacro UNMSM - Álgebra y Geometría</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f4f4f4;
-      padding: 2rem;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
-    .pregunta { margin-bottom: 20px; }
-    .resultado {
-      font-weight: bold;
-      margin-top: 30px;
-      padding: 1rem;
-      background: #e7f4e4;
-      border: 1px solid #b0e1b0;
-      border-radius: 8px;
-      display: none;
-    }
-    .timer {
-      font-size: 18px;
-      color: red;
-      margin-bottom: 20px;
-      display: none;
-    }
-    #simulacro { display: none; }
-    #startButton {
-      padding: 12px 24px;
-      font-size: 16px;
-      border: none;
-      background-color: #00509e;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulacro Demo | SimulaUNMSM</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="simulacro.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Simulacro UNMSM - Álgebra y Geometría</h1>
-    <button id="startButton">Empezar simulacro</button>
-    <div class="timer" id="timer">Tiempo restante: 15:00</div>
-    <form id="simulacro">
+  <header class="quiz-header">
+    <a class="back-link" href="index.html">Volver al inicio</a>
+    <h1>Simulacro de Álgebra y Geometría</h1>
+    <p>10 preguntas tipo admisión, cronómetro activo y corrección inmediata.</p>
+  </header>
 
-      <!-- Álgebra -->
-      <div class="pregunta">
-        <p>1. Si x + 2 = 7, ¿cuánto vale x?</p>
-        <label><input type="radio" name="p1" value="A"> A) 5</label><br>
-        <label><input type="radio" name="p1" value="B"> B) 3</label><br>
-        <label><input type="radio" name="p1" value="C"> C) 9</label><br>
-        <label><input type="radio" name="p1" value="D"> D) 4</label><br>
-        <label><input type="radio" name="p1" value="E"> E) 6</label>
+  <main class="quiz-main">
+    <section id="start-screen" class="quiz-panel">
+      <h2>Modo Demo</h2>
+      <p>Tiempo máximo: <strong>10 minutos</strong>. Responde cada pregunta y revisa tu desempeño al final.</p>
+      <button id="start-btn" class="btn btn-action" type="button">Empezar simulacro</button>
+    </section>
+
+    <section id="quiz-screen" class="quiz-panel hidden" aria-live="polite">
+      <div class="status-row">
+        <p id="progress-text">Pregunta 1 de 10</p>
+        <p id="timer" class="timer">10:00</p>
+      </div>
+      <div class="progress-track" aria-hidden="true">
+        <div id="progress-bar" class="progress-bar"></div>
       </div>
 
-      <div class="pregunta">
-        <p>2. Resuelve: (x + 3)(x - 3)</p>
-        <label><input type="radio" name="p2" value="A"> A) x² - 9</label><br>
-        <label><input type="radio" name="p2" value="B"> B) x² + 9</label><br>
-        <label><input type="radio" name="p2" value="C"> C) x² - 6</label><br>
-        <label><input type="radio" name="p2" value="D"> D) x² + 6</label><br>
-        <label><input type="radio" name="p2" value="E"> E) x² - 3</label>
+      <h2 id="question-title">Pregunta</h2>
+      <div id="options" class="options"></div>
+
+      <div class="actions">
+        <button id="check-btn" class="btn btn-action" type="button">Validar respuesta</button>
+        <button id="next-btn" class="btn btn-secondary hidden" type="button">Siguiente</button>
       </div>
 
-      <div class="pregunta">
-        <p>3. Si 2x - 5 = 9, ¿cuánto vale x?</p>
-        <label><input type="radio" name="p3" value="A"> A) 7</label><br>
-        <label><input type="radio" name="p3" value="B"> B) 5</label><br>
-        <label><input type="radio" name="p3" value="C"> C) 4</label><br>
-        <label><input type="radio" name="p3" value="D"> D) 6</label><br>
-        <label><input type="radio" name="p3" value="E"> E) 8</label>
+      <p id="feedback" class="feedback" role="status"></p>
+    </section>
+
+    <section id="result-screen" class="quiz-panel hidden">
+      <h2>Resultado final</h2>
+      <p id="score-text" class="score-text"></p>
+      <p id="level-text"></p>
+      <p id="best-score-text"></p>
+      <div class="actions">
+        <button id="retry-btn" class="btn btn-action" type="button">Intentar de nuevo</button>
+        <a class="btn btn-secondary" href="index.html">Ir al inicio</a>
       </div>
+      <div id="review-list" class="review-list"></div>
+    </section>
+  </main>
 
-      <div class="pregunta">
-        <p>4. Factoriza: x² + 5x + 6</p>
-        <label><input type="radio" name="p4" value="A"> A) (x + 2)(x + 3)</label><br>
-        <label><input type="radio" name="p4" value="B"> B) (x + 1)(x + 6)</label><br>
-        <label><input type="radio" name="p4" value="C"> C) (x - 2)(x - 3)</label><br>
-        <label><input type="radio" name="p4" value="D"> D) (x + 6)(x - 1)</label><br>
-        <label><input type="radio" name="p4" value="E"> E) (x + 2)(x - 3)</label>
-      </div>
-
-      <div class="pregunta">
-        <p>5. Resuelve: (x - 4)²</p>
-        <label><input type="radio" name="p5" value="A"> A) x² - 8x + 16</label><br>
-        <label><input type="radio" name="p5" value="B"> B) x² + 16</label><br>
-        <label><input type="radio" name="p5" value="C"> C) x² - 4</label><br>
-        <label><input type="radio" name="p5" value="D"> D) x² - 8x - 16</label><br>
-        <label><input type="radio" name="p5" value="E"> E) x² - 4x + 16</label>
-      </div>
-
-      <!-- Geometría -->
-      <div class="pregunta">
-        <p>6. ¿Cuál es la suma de los ángulos interiores de un triángulo?</p>
-        <label><input type="radio" name="p6" value="A"> A) 180°</label><br>
-        <label><input type="radio" name="p6" value="B"> B) 360°</label><br>
-        <label><input type="radio" name="p6" value="C"> C) 90°</label><br>
-        <label><input type="radio" name="p6" value="D"> D) 270°</label><br>
-        <label><input type="radio" name="p6" value="E"> E) 120°</label>
-      </div>
-
-      <div class="pregunta">
-        <p>7. Si dos lados de un triángulo miden 5 y 7, ¿cuál podría ser el tercer lado?</p>
-        <label><input type="radio" name="p7" value="A"> A) 3</label><br>
-        <label><input type="radio" name="p7" value="B"> B) 12</label><br>
-        <label><input type="radio" name="p7" value="C"> C) 1</label><br>
-        <label><input type="radio" name="p7" value="D"> D) 10</label><br>
-        <label><input type="radio" name="p7" value="E"> E) 5</label>
-      </div>
-
-      <div class="pregunta">
-        <p>8. Un triángulo equilátero tiene todos sus lados de 6 cm. ¿Cuál es su perímetro?</p>
-        <label><input type="radio" name="p8" value="A"> A) 12 cm</label><br>
-        <label><input type="radio" name="p8" value="B"> B) 18 cm</label><br>
-        <label><input type="radio" name="p8" value="C"> C) 6 cm</label><br>
-        <label><input type="radio" name="p8" value="D"> D) 36 cm</label><br>
-        <label><input type="radio" name="p8" value="E"> E) 24 cm</label>
-      </div>
-
-      <div class="pregunta">
-        <p>9. ¿Cuál es el área de un triángulo con base 8 cm y altura 5 cm?</p>
-        <label><input type="radio" name="p9" value="A"> A) 20 cm²</label><br>
-        <label><input type="radio" name="p9" value="B"> B) 30 cm²</label><br>
-        <label><input type="radio" name="p9" value="C"> C) 40 cm²</label><br>
-        <label><input type="radio" name="p9" value="D"> D) 10 cm²</label><br>
-        <label><input type="radio" name="p9" value="E"> E) 25 cm²</label>
-      </div>
-
-      <div class="pregunta">
-        <p>10. ¿Cómo se llama el segmento que une un vértice con el punto medio del lado opuesto?</p>
-        <label><input type="radio" name="p10" value="A"> A) Mediana</label><br>
-        <label><input type="radio" name="p10" value="B"> B) Altura</label><br>
-        <label><input type="radio" name="p10" value="C"> C) Bisectriz</label><br>
-        <label><input type="radio" name="p10" value="D"> D) Mediatriz</label><br>
-        <label><input type="radio" name="p10" value="E"> E) Diagonal</label>
-      </div>
-
-      <button type="submit">Enviar</button>
-    </form>
-
-    <div class="resultado" id="resultado"></div>
-  </div>
-
-  <script>
-    const respuestas = {
-      p1: "A", p2: "A", p3: "A", p4: "A", p5: "A",
-      p6: "A", p7: "D", p8: "B", p9: "A", p10: "A"
-    };
-
-    const startButton = document.getElementById("startButton");
-    const timerElement = document.getElementById("timer");
-    const simulacroForm = document.getElementById("simulacro");
-    const resultadoDiv = document.getElementById("resultado");
-
-    let tiempoRestante = 15 * 60;
-    let interval;
-
-    startButton.addEventListener("click", function () {
-      startButton.style.display = "none";
-      simulacroForm.style.display = "block";
-      timerElement.style.display = "block";
-      resultadoDiv.style.display = "none";
-
-      interval = setInterval(() => {
-        const minutos = Math.floor(tiempoRestante / 60);
-        const segundos = tiempoRestante % 60;
-        timerElement.textContent = `Tiempo restante: ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
-        if (tiempoRestante <= 0) {
-          clearInterval(interval);
-          simulacroForm.requestSubmit();
-        }
-        tiempoRestante--;
-      }, 1000);
-    });
-
-    simulacroForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      clearInterval(interval);
-
-      let correctas = 0;
-      for (let i = 1; i <= 10; i++) {
-        const respuesta = document.querySelector(`input[name="p${i}"]:checked`);
-        if (respuesta && respuesta.value === respuestas[`p${i}`]) {
-          correctas++;
-        }
-      }
-
-      const puntaje = correctas * 2;
-      simulacroForm.style.display = "none";
-      timerElement.style.display = "none";
-      resultadoDiv.style.display = "block";
-      resultadoDiv.textContent = `Tu puntaje final: ${puntaje} de 20 | Respuestas correctas: ${correctas} de 10`;
-    });
-  </script>
+  <script src="simulacro.js"></script>
 </body>
 </html>
